@@ -47,8 +47,10 @@ class NewTransactionForm extends StatelessWidget {
     final amountFieldController = TextEditingController();
     final descriptionFieldController = TextEditingController();
     int selectedCategoryIndex = 0;
+    DateTime selectedDate = DateTime.now();
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: Column(
@@ -56,7 +58,7 @@ class NewTransactionForm extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text('\$ ', style: bigNumberSignStyle,),
+                  const Text('\$ ', style: bigNumberSignStyle,),
                   Expanded(
                     child: TextField(
                       controller: amountFieldController,
@@ -76,44 +78,77 @@ class NewTransactionForm extends StatelessWidget {
                 decoration: const InputDecoration.collapsed(hintText: 'Description'),
               ),
               addVerticalSpace(15),
-              ElevatedButton(
-                onPressed: () {
-                  user.addTransaction(
-                    user.selectedAccountIndex, 
-                    Transaction(
-                      uuid: uuid.v4(), 
-                      date: DateTime.now(), 
-                      transactionCategory: selectedAccount.transactionCategories[selectedCategoryIndex], 
-                      description: descriptionFieldController.text, 
-                      amount: double.parse(amountFieldController.text)
-                    )
+              StatefulBuilder(
+                builder: (context, setState) {
+                  return Row(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          var result = await showDatePicker(context: context, firstDate: DateTime(2000), lastDate: DateTime(2100)); 
+                          if (result != null) {
+                            selectedDate = result;
+                          }
+                          debugPrint('Date selected: ${selectedDate.toString()}');
+                          setState(() {});
+                        }, 
+                        icon: const Icon(Icons.calendar_month)
+                      ), 
+                      ElevatedButton(
+                        onPressed: () {
+                          user.addTransaction(
+                            user.selectedAccountIndex, 
+                            Transaction(
+                              uuid: uuid.v4(), 
+                              date: selectedDate, 
+                              transactionCategory: selectedAccount.transactionCategories[selectedCategoryIndex], 
+                              description: descriptionFieldController.text, 
+                              amount: double.parse(amountFieldController.text)
+                            )
+                          );
+                        }, 
+                        child: (
+                            // selectedDate day AND month AND year are the same as those of the present
+                            selectedDate.day == DateTime.now().day
+                            && selectedDate.month == DateTime.now().month
+                            && selectedDate.year == DateTime.now().year
+                          ) 
+                          ? const Text('Add for today') 
+                          : Text('Add for ${formatAsDmy(selectedDate)}')
+                      ),
+                    ],
                   );
-                }, 
-                child: Text('Add')
+                }
               ),
-              
             ],
           ),
         ),
-        SizedBox(
-          width: 200,
-          height: 200,
-          child: ListView.builder(
-            itemCount: selectedAccount.transactionCategories.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
-                child: ElevatedButton.icon(
-                  style: (index == selectedCategoryIndex) ? ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.onPrimary) : ElevatedButton.styleFrom(),
-                  onPressed: () {
-                    selectedCategoryIndex = index;
+        StatefulBuilder(
+          builder: (context, setState) {
+          return Column(
+            children: [
+              const Text('Category'),
+              SizedBox(
+                width: 170,
+                height: 100,
+                child: ListView.builder(
+                  itemCount: selectedAccount.transactionCategories.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+                      child: ElevatedButton.icon(
+                        style: (index == selectedCategoryIndex) ? ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.onPrimary) : ElevatedButton.styleFrom(),
+                        onPressed: () {
+                          setState(() {selectedCategoryIndex = index;});
+                        },
+                        icon: Icon(categoryIconDataFromString(selectedAccount.transactionCategories[index].iconData)),
+                        label: Text(selectedAccount.transactionCategories[index].name),
+                      ),
+                    );
                   },
-                  icon: Icon(categoryIconDataFromString(selectedAccount.transactionCategories[index].iconData)),
-                  label: Text(selectedAccount.transactionCategories[index].name),
                 ),
-              );
-            },
-          ),
+              ),
+            ],
+          );}
         )
       ],
     );

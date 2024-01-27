@@ -18,7 +18,5 @@ class Transaction {
   String description;
   double amount;
 
-  String dmyFormattedDate() {
-    return DateFormat('dd MMMM yyyy').format(this.date);
-  }
+  String dmyFormattedDate() => DateFormat('dd MMMM yyyy').format(this.date);
 }
