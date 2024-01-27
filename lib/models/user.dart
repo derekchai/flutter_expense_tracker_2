@@ -30,4 +30,9 @@ class User extends ChangeNotifier {
     accounts[targetAccountIndex].transactions.add(transaction);
     notifyListeners();
   }
+
+  void removeTransactionAt(int targetAccountIndex, int index) {
+    accounts[targetAccountIndex].transactions.removeAt(index);
+    notifyListeners();
+  }
 }

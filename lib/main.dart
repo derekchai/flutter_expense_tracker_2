@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker_2/models/account.dart';
 import 'package:flutter_expense_tracker_2/models/user.dart';
 import 'package:flutter_expense_tracker_2/pages/dashboard_page.dart';
+import 'package:flutter_expense_tracker_2/pages/transactions_page.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -37,11 +38,32 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  var selectedIndex = 0;
+
+  @override
   Widget build(BuildContext context) {
+    Widget page;
+
+    switch (selectedIndex) {
+      case 0:
+        page = const DashboardPage();
+        break;
+      case 1: 
+        page = const TransactionsPage();
+        break;
+      default:
+        throw UnimplementedError('No widget for selectedIndex $selectedIndex');
+    }
+
+
     return Scaffold(
       body: Row(
         children: [
@@ -49,23 +71,26 @@ class HomePage extends StatelessWidget {
             child: NavigationRail(
               destinations: const [
                 NavigationRailDestination(
-                  icon: Icon(Icons.home),
-                  label: Text('Home'),
+                  icon: Icon(Icons.dashboard),
+                  label: Text('Dashboard'),
                 ),
                 NavigationRailDestination(
-                  icon: Icon(Icons.favorite),
-                  label: Text('Favorites'),
+                  icon: Icon(Icons.attach_money),
+                  label: Text('Transactions'),
                 ),
               ],
-              selectedIndex: 0,
+              selectedIndex: selectedIndex,
               onDestinationSelected: (value) {
-                debugPrint('Selected: $value');
+                setState(() {
+                  selectedIndex = value;
+                });
               },
             )
           ),
           Expanded(
-            child: Container(
-              child: const DashboardPage()
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: page,
             )
           )
         ],

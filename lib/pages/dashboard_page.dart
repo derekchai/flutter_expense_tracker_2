@@ -4,6 +4,7 @@ import 'package:flutter_expense_tracker_2/models/account.dart';
 import 'package:flutter_expense_tracker_2/models/transaction.dart';
 import 'package:flutter_expense_tracker_2/models/transaction_category.dart';
 import 'package:flutter_expense_tracker_2/models/user.dart';
+import 'package:flutter_expense_tracker_2/pages/transactions_page.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -31,33 +32,26 @@ class DashboardPage extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            user.addTransaction(user.selectedAccountIndex, Transaction(uuid: uuid.v4(), date: DateTime.now(), transactionCategory: TransactionCategory(uuid: uuid.v4(), iconData: Icons.attach_money.toString(), name: 'Example transaction', type: TransactionCategoryType.expense), description: 'This is an example transaction', amount: 100));
+            user.addTransaction(
+              user.selectedAccountIndex, 
+              Transaction(
+                uuid: uuid.v4(), 
+                date: DateTime.now(), 
+                transactionCategory: TransactionCategory(
+                  uuid: uuid.v4(), 
+                  iconData: Icons.attach_money.toString(), 
+                  name: 'Example transaction', 
+                  type: TransactionCategoryType.expense
+                ), 
+                description: 'This is an example transaction', 
+                amount: 100
+              )
+            );
            },
           child: const Text('Add example transaction'),
         ),
         Expanded(child: TransactionsListView(selectedAccount: selectedAccount)),
       ],
-    );
-  }
-}
-
-class TransactionsListView extends StatelessWidget {
-  const TransactionsListView({
-    super.key,
-    required this.selectedAccount,
-  });
-
-  final Account selectedAccount;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: selectedAccount.transactions.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text('A')
-        );
-      }
     );
   }
 }

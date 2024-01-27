@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker_2/models/transaction_category.dart';
+// ignore_for_file: unnecessary_this
 
-class Transaction extends ChangeNotifier {
+import 'package:flutter_expense_tracker_2/models/transaction_category.dart';
+import 'package:intl/intl.dart';
+
+class Transaction {
   Transaction({
     required this.uuid,
     required this.date,
@@ -15,4 +17,8 @@ class Transaction extends ChangeNotifier {
   TransactionCategory transactionCategory;
   String description;
   double amount;
+
+  String dmyFormattedDate() {
+    return DateFormat('dd MMMM yyyy').format(this.date);
+  }
 }
