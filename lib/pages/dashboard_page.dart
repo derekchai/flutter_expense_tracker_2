@@ -25,7 +25,10 @@ class DashboardPage extends StatelessWidget {
         Text('Transaction category count: ${selectedAccount.transactionCategories.length}'),
         ElevatedButton(
           onPressed: () {
-            user.addAccount(Account(uuid: uuid.v4(), name: 'Account ${user.accounts.length + 1}', transactions: [], transactionCategories: []));
+            user.addAccount(Account(uuid: uuid.v4(), name: 'Account ${user.accounts.length + 1}', transactions: [], transactionCategories: [
+              TransactionCategory(uuid: uuid.v4(), iconData: Icons.money.toString(), name: "Wages", type: TransactionCategoryType.income),
+              TransactionCategory(uuid: uuid.v4(), iconData: Icons.fastfood.toString(), name: "Food", type: TransactionCategoryType.expense)
+            ]));
             user.selectedAccountIndex += 1;
           },
           child: const Text('Add default account')
@@ -49,6 +52,12 @@ class DashboardPage extends StatelessWidget {
             );
            },
           child: const Text('Add example transaction'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            user.selectNextAccount();
+          },
+          child: const Text('Select next account')
         ),
         Expanded(child: TransactionsListView(selectedAccount: selectedAccount)),
       ],

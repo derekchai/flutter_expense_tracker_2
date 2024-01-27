@@ -35,4 +35,13 @@ class User extends ChangeNotifier {
     accounts[targetAccountIndex].transactions.removeAt(index);
     notifyListeners();
   }
+
+  void selectNextAccount() {
+    if (selectedAccountIndex + 1 == accounts.length) {
+      selectedAccountIndex = 0;
+    } else {
+      selectedAccountIndex += 1;
+    }
+    notifyListeners();
+  }
 }

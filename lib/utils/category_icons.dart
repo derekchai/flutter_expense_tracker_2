@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 const List<IconData> categoryIcons = [
-  Icons.attach_money
+  Icons.attach_money,
+  Icons.money,
+  Icons.fastfood
 ];
 
 IconData? categoryIconDataFromString(String string) {
