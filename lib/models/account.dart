@@ -15,8 +15,8 @@ class Account extends ChangeNotifier {
   List<Transaction> transactions;
   List<TransactionCategory> transactionCategories; 
 
-  void changeNameTo(String name) {
-    name = name;
+  void changeNameTo(String newName) {
+    name = newName;
     notifyListeners();
   }
 
