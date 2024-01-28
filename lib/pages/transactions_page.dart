@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_expense_tracker_2/main.dart';
 import 'package:flutter_expense_tracker_2/models/account.dart';
 import 'package:flutter_expense_tracker_2/models/transaction.dart';
+import 'package:flutter_expense_tracker_2/models/transaction_category.dart';
 import 'package:flutter_expense_tracker_2/models/user.dart';
 import 'package:flutter_expense_tracker_2/utils/add_space.dart';
 import 'package:flutter_expense_tracker_2/utils/category_icons.dart';
@@ -95,6 +96,12 @@ class NewTransactionForm extends StatelessWidget {
                       ), 
                       ElevatedButton(
                         onPressed: () {
+                          if (amountFieldController.text.isEmpty) {
+                            debugPrint('No amount inputted');
+                            // TODO message box
+                            return;
+                          }
+
                           user.addTransaction(
                             user.selectedAccountIndex, 
                             Transaction(
@@ -102,7 +109,7 @@ class NewTransactionForm extends StatelessWidget {
                               date: selectedDate, 
                               transactionCategory: selectedAccount.transactionCategories[selectedCategoryIndex], 
                               description: descriptionFieldController.text, 
-                              amount: double.parse(amountFieldController.text)
+                              amount: (selectedAccount.transactionCategories[selectedCategoryIndex].type == TransactionCategoryType.income) ? double.parse(amountFieldController.text) : double.parse(amountFieldController.text) * -1
                             )
                           );
                         }, 
@@ -112,7 +119,7 @@ class NewTransactionForm extends StatelessWidget {
                             && selectedDate.month == DateTime.now().month
                             && selectedDate.year == DateTime.now().year
                           ) 
-                          ? const Text('Add for today') 
+                          ? const Text('Add new transaction for today') 
                           : Text('Add for ${formatAsDmy(selectedDate)}')
                       ),
                     ],

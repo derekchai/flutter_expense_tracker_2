@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker_2/models/account.dart';
+import 'package:flutter_expense_tracker_2/models/transaction_category.dart';
 import 'package:flutter_expense_tracker_2/models/user.dart';
 import 'package:flutter_expense_tracker_2/pages/dashboard_page.dart';
 import 'package:flutter_expense_tracker_2/pages/transactions_page.dart';
@@ -7,7 +8,15 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 const uuid = Uuid();
-final Account defaultAccount = Account(uuid: uuid.v4(), name: "Default Account", transactions: [], transactionCategories: []);
+final Account defaultAccount = Account(
+  uuid: uuid.v4(), 
+  name: "Default Account", 
+  transactions: [], 
+  transactionCategories: [
+    TransactionCategory(uuid: uuid.v4(), iconData: Icons.money.toString(), name: "Wages", type: TransactionCategoryType.income),
+    TransactionCategory(uuid: uuid.v4(), iconData: Icons.fastfood.toString(), name: "Food", type: TransactionCategoryType.expense)
+  ]
+);
 
 User user = User(accounts: [defaultAccount], selectedAccountIndex: 0);
 
@@ -62,7 +71,6 @@ class _HomePageState extends State<HomePage> {
       default:
         throw UnimplementedError('No widget for selectedIndex $selectedIndex');
     }
-
 
     return Scaffold(
       body: Row(
