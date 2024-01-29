@@ -4,9 +4,8 @@ import 'package:flutter_expense_tracker_2/models/account.dart';
 import 'package:flutter_expense_tracker_2/models/transaction.dart';
 import 'package:flutter_expense_tracker_2/models/transaction_category.dart';
 import 'package:flutter_expense_tracker_2/models/user.dart';
-import 'package:flutter_expense_tracker_2/pages/transactions_page.dart';
-import 'package:flutter_expense_tracker_2/utils/string_formatters.dart';
 import 'package:flutter_expense_tracker_2/utils/styles.dart';
+import 'package:flutter_expense_tracker_2/widgets/transactions_list_view.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
